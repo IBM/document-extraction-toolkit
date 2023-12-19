@@ -1,0 +1,12 @@
+.env
+node_modules
+.DS_Store
+
+
+/.minio_storage/*
+__pycache__
+.pyc
+
+detpyvenv
+
+tmp

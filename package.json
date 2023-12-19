@@ -1,0 +1,27 @@
+{
+  "name": "document-extraction-toolkit",
+  "version": "1.0.0",
+  "description": "Extract data from PDF files using watsonx prompts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "license:add": "npx license-check-and-add add -f license-check-and-add.config.json",
+    "license:check": "npx license-check-and-add check -f license-check-and-add.config.json",
+    "license:remove": "npx license-check-and-add remove -f license-check-and-add.config.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IBM/document-extraction-toolkit.git"
+  },
+  "keywords": [
+    "watsonx",
+    "react-admin",
+    "ui"
+  ],
+  "author": "Bob Fang",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/IBM/document-extraction-toolkit/issues"
+  },
+  "homepage": "https://github.com/IBM/document-extraction-toolkit#readme"
+}

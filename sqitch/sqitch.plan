@@ -1,0 +1,13 @@
+%syntax-version=1.0.0
+%project=pdf-extractor
+
+1.utils_schema 2023-08-18T21:44:34Z Bob Fang <sbfang@us.ibm.com> # Add utility schema
+2.postgrest_roles 2023-08-18T21:45:23Z Bob Fang <sbfang@us.ibm.com> # Add postgrest_roles
+3.data_schema 2023-08-18T21:45:48Z Bob Fang <sbfang@us.ibm.com> # Add data_schema
+4.users 2023-08-18T22:32:10Z Bob Fang <sbfang@us.ibm.com> # Add users table
+4.roles 2023-08-18T22:33:38Z Bob Fang <sbfang@us.ibm.com> # Add roles table
+5.documents [4.users 4.roles] 2023-08-18T22:38:25Z Bob Fang <sbfang@us.ibm.com> # Add documents table
+6.prompts [5.documents] 2023-08-18T22:48:48Z Bob Fang <sbfang@us.ibm.com> # Add prompts
+7.jobs [5.documents 4.users] 2023-08-18T22:50:08Z Bob Fang <sbfang@us.ibm.com> # Add jobs table
+8.extracted_relations_live [5.documents 4.users] 2023-08-18T22:51:48Z Bob Fang <sbfang@us.ibm.com> # Add extracted relations table
+10.procrastinate_schema [8.extracted_relations_live] 2023-08-29T22:12:19Z Bob Fang <sbfang@us.ibm.com> # Add Procrastinate schema
