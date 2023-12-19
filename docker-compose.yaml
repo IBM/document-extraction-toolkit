@@ -1,0 +1,103 @@
+version: '3.7'
+services:
+  # PostgREST instance, is responsible for communicating with the database
+  # and providing a REST api, (almost) every request that is sent to the database goes through it
+  postgrest:
+    image: postgrest/postgrest:latest
+    container_name: postgrest
+    ports:
+      - '3000:3000'
+    links:
+      - db
+    environment:
+      - PGRST_OPENAPI_MODE=ignore-privileges
+      #- PGRST_DB_URI=postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - PGRST_DB_URI=${PGRST_DB_URI-postgres://auth:authpass@db:5432/det}
+      - PGRST_DB_SCHEMAS=${DB_SCHEMA-"data,public"}
+      - PGRST_DB_EXTRA_SEARCH_PATH=${DB_EXTRA_SEARCH_PATH-public,ibm_extension}
+      - PGRST_DB_ANON_ROLE=${DB_ANON_ROLE-anonymous}
+      - PGRST_DB_POOL=${DB_POOL-10}
+      - PGRST_JWT_SECRET=${PGRST_JWT_SECRET-reallyreallyreallyreallyverysafe}
+      - PGRST_MAX_ROWS=${MAX_ROWS}
+      - PGRST_PRE_REQUEST=${PRE_REQUEST}
+      # - PGRST_SERVER_PROXY_URI=${SERVER_PROXY_URI}
+    depends_on:
+      - db
+      - sqitch-schema
+    restart: 'unless-stopped'
+  ### DB START
+  # This is the database to which the all the other components in the stack will connect and interact with
+  # (but mostly it's PostgREST that is going to be responsible for the bulk of the db traffic)
+  # Having the database in a container is very convenient in development but in production you will
+  # use a separate database instance, like Amazon RDS, i.e. in production this section will be
+  # commented and in the .env file you will specify the ip of your separate database instance
+  db:
+    image: postgres:14.5-alpine
+    container_name: det-postgres
+    expose:
+      - "5432"
+    ports:
+      - '5432:5432'
+    environment:
+      # env vars specific to postgres image used on first boot
+      - POSTGRES_USER=${SUPER_USER-superuser}
+      - POSTGRES_PASSWORD=${SUPER_USER_PASSWORD-superuserpass}
+      - POSTGRES_DB=${DB_NAME-det}
+      - PGDATA=/var/lib/pg_data
+    volumes:
+      - './.pgdata:/var/lib/postgresql/data'
+    restart: 'unless-stopped'
+  ### DB END
+    # sqitch instance, is responsible for migration of db schema
+  sqitch-schema:
+    image: sqitch/sqitch:v1.4.0.1
+    container_name: sqitch-schema
+    links:
+      - db
+    command: ["deploy", "--verify"]
+    volumes:
+      - ./sqitch:/repo
+    environment:
+      # if you want to connect to cloud postgres you'll need to add ?sslmode=require to DB_URI below
+      #- DB_URI=postgres://${SUPER_USER}:${SUPER_USER_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+      # remember! sqitch logins with super user first using URI
+      - SQITCH_TARGET=${DB_URI-postgres://superuser:superuserpass@db:5432/det}
+      - SQITCH_DEPLOY=deploy --verify
+      # env vars useful for our sql scripts
+      # remember! sqitch logins with super user, here we need the regular user details
+      - DB_USER=${DB_USER-auth}
+      - DB_PASS=${DB_PASS-authpass}
+      - DB_ANON_ROLE=${DB_ANON_ROLE-anonymous}
+      - DB_READER_ROLE=${DB_READER_ROLE-reader}
+      - DB_WRITER_ROLE=${DB_WRITER_ROLE-writer}
+      - DB_MANAGER_ROLE=${DB_MANAGER_ROLE-manager}
+      - RESET_DB=${RESET_DB}
+      - DEMO_DB=${DEMO_DB}
+      - PGDATABASE=${DB_NAME-det}
+      - PGUSER=${SUPER_USER-superuser}
+      - PGHOST=${DB_HOST-db}
+      - PGPORT=${DB_PORT-5432}
+    depends_on:
+      - db
+  # schemaspy:
+  #   image: schemaspy/schemaspy:6.2.4
+  #   container_name: schemaspy
+  #   tty: true
+  #   volumes:
+  #     - ./schemaspy:/output
+  #   command: ["/app/start.sh"]
+  #   environment:
+  #     - DATABASE_TYPE=pgsql
+  #     - DATABASE_HOST=${DB_HOST-db}
+  #     - DATABASE_NAME=${DB_NAME-det}
+  #     - DATABASE_USER=${SUPER_USER-superuser}
+  #     - DATABASE_PASSWORD=${SUPER_USER_PASSWORD-superuserpass}
+  #     - DATABASE_SCHEMA=${DB_SCHEMA-data}
+  #     - SCHEMASPY_PORT=6001
+  #   ports:
+  #     - '6001:6001'
+  #   links:
+  #     - db
+  #   depends_on:
+  #     - db
+  #   restart: on-failure

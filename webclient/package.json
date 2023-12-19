@@ -1,0 +1,22 @@
+{
+  "name": "det-ui",
+  "version": "0.1.0",
+  "docker_image_name": "det-ui",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "develop:server": "cd server && cross-env SERVER_PORT=7001 POSTGREST_URL=http://localhost:3000 npm start",
+    "develop:client": "cd client && cross-env PORT=3003 BROWSER=none REACT_APP_VERSION=v0.0.0 npm run develop",
+    "develop:prod": "npm-run-all --parallel develop:server develop:client",
+    "start": "cd server && cross-env NODE_ENV=production npm start",
+    "build": "cd client && cross-env REACT_APP_VERSION=$npm_package_version npm run build",
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install --legacy-peer-deps",
+    "install:all": "npm-run-all --parallel install:server install:client",
+    "setupenv": "cp ./server/.env_example ./server/.env && cp ./webclient/.env_example ./webclient/.env"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "npm-run-all": "^4.1.5"
+  }
+}
