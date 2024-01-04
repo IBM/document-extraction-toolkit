@@ -8,7 +8,7 @@ resource "random_pet" "postgresdb_password" {
   separator = "" # No separator between words
 }
 
-output "postgresdb_password" {
+output "postgresdb_password_16" {
   value     = slice(random_pet.postgresdb_password.id,0,16)
   sensitive = true
 }
@@ -18,7 +18,7 @@ resource "random_pet" "pgrst_jwt" {
   separator = "" # No separator between words
 }
 
-output "pgrst_jwt" {
+output "pgrst_jwt_32" {
   value     = slice(random_pet.pgrst_jwt.id,0,32)
   sensitive = true
 }
@@ -32,7 +32,7 @@ resource "ibm_database" "databases_for_postgresql" {
   resource_group_id = data.ibm_resource_group.rg.id
   users {
     name     = "pgrstuser"
-    password = output.postgresdb_password
+    password = output.postgresdb_password_16
   }
 
   group {
