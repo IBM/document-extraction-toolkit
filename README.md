@@ -84,7 +84,7 @@ The database is only temporary, it can be reset by simply running `docker compos
 Schematics workspace settings:
 | Field                      | Description                                          |
 |----------------------------|------------------------------------------------------|
-| URL                        | [https://github.com/IBM/document-extraction-toolkit/blob/main/terraform](https://github.com/IBM/document-extraction-toolkit/blob/main/terraform) |
+| URL                        | [https://github.com/IBM/document-extraction-toolkit/tree/main/terraform](https://github.com/IBM/document-extraction-toolkit/tree/main/terraform) |
 | Use full repository        | Uncheck                                              |
 | Personal Access Token      | Not required (if you fork this repo, you will need one) |
 | Terraform version          | terraform_v1.5                                       |

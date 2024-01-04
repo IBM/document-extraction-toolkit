@@ -41,7 +41,7 @@ variable "github_repo" {
 variable "ssh_deploykey" {
   default = ""
   sensitive = true
-  description = "Create a deploy key using ssh-keygen -t ed25519 -C \"email@ibm.com\" -f newkey"
+  description = "Create a deploy private key using ssh-keygen -t ed25519 -C \"email@ibm.com\" -f yourkeyname"
 }
 
 variable "genai_api" {

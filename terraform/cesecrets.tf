@@ -8,20 +8,20 @@ resource "ibm_code_engine_secret" "ce_secret_sqitch" {
     DB_ANON_ROLE         = "anonymous"
     DB_HOST = data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname
     DB_MANAGER_ROLE = "manager"
-    DB_PASS = random_pet.postgresdb_password.id
+    DB_PASS = output.postgresdb_password
     DB_PORT = data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port
     DB_READER_ROLE = "reader"
     DB_WRITER_ROLE = "writer"
     DB_SCHEMA = "data,public"
-    DB_URI = "postgres://admin:${random_password.postgres_admin_password.result}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
+    DB_URI = "postgres://admin:${output.postgres_admin_password}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
     DB_USER = "pgrstuser"
     PGDATABASE = "det"
     PGHOST = data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname
     PGPORT = data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port
-    PGPASSWORD = random_password.postgres_admin_password.result
+    PGPASSWORD = output.postgres_admin_password
     PGUSER = "admin"
     SQITCH_DEPLOY  = "deploy --verify"
-    SQITCH_TARGET = "postgres://admin:${random_password.postgres_admin_password.result}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
+    SQITCH_TARGET = "postgres://admin:${output.postgres_admin_password}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
   }
 }
 
@@ -35,10 +35,10 @@ resource "ibm_code_engine_secret" "ce_secret_postgrest" {
     PGRST_DB_ANON_ROLE         = "anonymous"
     PGRST_DB_EXTRA_SEARCH_PATH = "public,ibm_extension"
     PGRST_DB_POOL              = 10
-    PGRST_JWT_SECRET           = random_pet.postgresdb_password.id
+    PGRST_JWT_SECRET           = output.pgrst_jwt
     PGRST_DB_SCHEMAS           = "data,public"
     PGRST_OPENAPI_MODE         = "ignore-privileges"
-    PGRST_DB_URI               = "postgres://pgrstuser:${random_pet.postgresdb_password.id}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
+    PGRST_DB_URI               = "postgres://pgrstuser:${output.postgresdb_password}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
   }
 }
 
@@ -52,7 +52,7 @@ resource "ibm_code_engine_secret" "ce_secret_ui" {
     AWS_ACCESS_KEY_ID         = ibm_resource_key.cos_resource_key.credentials["cos_hmac_keys.access_key_id"]
     AWS_SECRET_ACCESS_KEY     = ibm_resource_key.cos_resource_key.credentials["cos_hmac_keys.secret_access_key"]
     FORCE_SSL                 = "FALSE"
-    PGRST_JWT_SECRET          = random_pet.postgresdb_password.id
+    PGRST_JWT_SECRET          = output.pgrst_jwt
     POSTGREST_URL             = ibm_code_engine_app.ce_postgrest_instance.endpoint_internal
     REACT_APP_OIDC_CLIENT_ID  = ibm_appid_application.appid_app.client_id
     SERVER_OIDC_CLIENT_ID     = ibm_appid_application.appid_app.client_id
@@ -72,7 +72,7 @@ resource "ibm_code_engine_secret" "ce_secret_worker" {
   depends_on = [ibm_database.databases_for_postgresql, data.ibm_database_connection.postgresdb_connection,  ibm_cos_bucket.cos_bucket, ibm_resource_key.cos_resource_key, ibm_code_engine_app.ce_postgrest_instance]
   data = {
     DB_HOST = data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname
-    DB_PASS = random_pet.postgresdb_password.id
+    DB_PASS = output.postgresdb_password
     DB_PORT = data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port
     POSTGREST_URL             = ibm_code_engine_app.ce_postgrest_instance.endpoint_internal
     DB_NAME = "det"
@@ -83,6 +83,6 @@ resource "ibm_code_engine_secret" "ce_secret_worker" {
     S3_ENDPOINT               = "https://${ibm_cos_bucket.cos_bucket.s3_endpoint_public}"
     GENAI_API = var.genai_api
     GENAI_KEY = var.genai_apikey
-    PGRST_JWT_SECRET = random_pet.postgresdb_password.id
+    PGRST_JWT_SECRET = output.pgrst_jwt
   }
 }

@@ -4,12 +4,27 @@ resource "random_password" "postgres_admin_password" {
 }
 
 resource "random_pet" "postgresdb_password" {
-  length    = 8  # Adjust the desired length of the password
+  length    = 16  # Adjust the desired length of the password in words
   separator = "" # No separator between words
 }
 
 output "postgresdb_password" {
-  value     = random_pet.postgresdb_password.id
+  value     = slice(random_pet.postgresdb_password.id,0,16)
+  sensitive = true
+}
+
+output "postgresdb_admin_password" {
+  value     = slice(random_pet.postgres_admin_password.id,0,16)
+  sensitive = true
+}
+
+resource "random_pet" "pgrst_jwt" {
+  length    = 16  # Adjust the desired length of the password in words
+  separator = "" # No separator between words
+}
+
+output "pgrst_jwt" {
+  value     = slice(random_pet.pgrst_jwt.id,0,32)
   sensitive = true
 }
 
@@ -18,11 +33,11 @@ resource "ibm_database" "databases_for_postgresql" {
   service       = "databases-for-postgresql"
   plan          = "standard" # Update to your preferred plan
   location      = var.region
-  adminpassword = random_password.postgres_admin_password.result
+  adminpassword = output.postgresdb_admin_password
   resource_group_id = data.ibm_resource_group.rg.id
   users {
     name     = "pgrstuser"
-    password = random_pet.postgresdb_password.id
+    password = output.postgresdb_password
   }
 
   group {
