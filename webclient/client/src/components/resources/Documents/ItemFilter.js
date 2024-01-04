@@ -15,7 +15,7 @@ const ItemFilter = () => {
         search: stringify({
           page: 1,
           perPage: 25,
-          sort: 'diagnosed_date',
+          //sort: 'field',
           order: 'ASC',
           filter: JSON.stringify({ doc_id: record.id }),
         }),

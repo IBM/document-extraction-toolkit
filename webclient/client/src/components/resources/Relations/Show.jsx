@@ -43,15 +43,9 @@ const PostShow = () => (
     <SimpleShowLayout>
     <TextField source="id" />
     <ReferenceField source="doc_id" reference="documents" />
-      <ReferenceField source="user_id" reference="users" />
-      <DateField source="diagnosed_date" />
-      <TextField source="diagnosed_by" />
-      <TextField source="mdi" fullWidth multiline />
-      <TextField source="location_is_record" fullWidth multiline />
+    <ReferenceField source="prompt_id" reference="prompts" link="show" />
+    <TextField source="comments" fullWidth/>
       <TextField source="page_info" fullWidth multiline />
-      <TextField source="list_of_problems" fullWidth />
-      <TextField source="index_start" />
-      <TextField source="index_end" />
       <DateField source="created_at" showTime />
       <DateField source="updated_at" showTime/>
       <ImageFileField />
