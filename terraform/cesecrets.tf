@@ -1,6 +1,6 @@
 locals {
-  postgresdb_password_16 = slice(random_pet.postgresdb_password.id, 0, 16)
-  pgrst_jwt_32          = slice(random_pet.pgrst_jwt.id, 0, 32)
+  postgresdb_password_16 = substr(random_pet.postgresdb_password.id, 0, 16)
+  pgrst_jwt_32          = substr(random_pet.pgrst_jwt.id, 0, 32)
 }
 
 resource "ibm_code_engine_secret" "ce_secret_sqitch" {

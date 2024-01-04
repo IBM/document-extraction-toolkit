@@ -22,7 +22,7 @@ resource "ibm_database" "databases_for_postgresql" {
   resource_group_id = data.ibm_resource_group.rg.id
   users {
     name     = "pgrstuser"
-    password = slice(random_pet.postgresdb_password.id,0,16)
+    password = substr(random_pet.postgresdb_password.id,0,16)
   }
 
   group {
