@@ -18,7 +18,7 @@ resource "ibm_database" "databases_for_postgresql" {
   service       = "databases-for-postgresql"
   plan          = "standard" # Update to your preferred plan
   location      = var.region
-  adminpassword = random_password.postgres_admin_password
+  adminpassword = random_password.postgres_admin_password.id
   resource_group_id = data.ibm_resource_group.rg.id
   users {
     name     = "pgrstuser"
