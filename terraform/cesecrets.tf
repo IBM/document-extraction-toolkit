@@ -13,15 +13,15 @@ resource "ibm_code_engine_secret" "ce_secret_sqitch" {
     DB_READER_ROLE = "reader"
     DB_WRITER_ROLE = "writer"
     DB_SCHEMA = "data,public"
-    DB_URI = "postgres://admin:${output.postgres_admin_password}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
+    DB_URI = "postgres://admin:${random_password.postgres_admin_password}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
     DB_USER = "pgrstuser"
     PGDATABASE = "det"
     PGHOST = data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname
     PGPORT = data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port
-    PGPASSWORD = output.postgres_admin_password
+    PGPASSWORD = random_password.postgres_admin_password
     PGUSER = "admin"
     SQITCH_DEPLOY  = "deploy --verify"
-    SQITCH_TARGET = "postgres://admin:${output.postgres_admin_password}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
+    SQITCH_TARGET = "postgres://admin:${random_password.postgres_admin_password}@${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].hostname}:${data.ibm_database_connection.postgresdb_connection.postgres[0].hosts[0].port}/det"
   }
 }
 
