@@ -1,4 +1,5 @@
 # Create an IBM Container Registry namespace
+# defaults to global region icr.io
 resource "ibm_cr_namespace" "cr_namespace" {
   name              = var.cr_namespace
   resource_group_id = data.ibm_resource_group.rg.id

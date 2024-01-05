@@ -22,9 +22,10 @@ variable "cr_namespace" {
     description = "Container Registry namespace"
 }
 
+# doesn't seem like the cr_registry can be created in other regions yet, defaults to global for now
 variable "cr_registry" {
-    default =  "us.icr.io"
-    description = "Location of the CR registry"
+    default =  "icr.io"
+    description = "Location of the CR registry - do not change yet"
 }
 
 variable "region" {

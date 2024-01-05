@@ -98,7 +98,7 @@ Once the workspace is created, please update the following variables:
 | resource_group  | Name of the resource group previously created.                                                        |
 | ce_project_id   | GUID of the Code Engine project. You can find this either on the URL path or the "Details" button.      |
 | cr_namespace    | Use a unique name. Do not use the default value.                                                        |
-| cr_registry     | Use private.icr.io for global. Do not use the public one.                                              |
+| cr_registry     | Use icr.io for global. TF currently doesn't provision into other regions yet so do not use another value until this is fixed |
 | region          | Use the same region where your resource group was created. All new resources are deployed to this region.|
 | use_ssh_key     | Determines if the SSH deploy key is to be used when pulling from the repo. Applies to private repos only.   |
 | ssh_deploykey   | Create an SSH deploy key used for container registry and Code Engine deployments when using with a private repo. Mark as sensitive.   |
