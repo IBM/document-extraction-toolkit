@@ -13,7 +13,7 @@
     "install:server": "cd server && npm install",
     "install:client": "cd client && npm install --legacy-peer-deps",
     "install:all": "npm-run-all --parallel install:server install:client",
-    "setupenv": "cp ./server/.env_example ./server/.env && cp ./webclient/.env_example ./webclient/.env"
+    "setupenv": "cp ./server/.env_example ./server/.env && cp ./.env_example ./.env"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
