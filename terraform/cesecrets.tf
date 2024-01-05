@@ -82,10 +82,10 @@ resource "ibm_code_engine_secret" "ce_secret_worker" {
     POSTGREST_URL             = ibm_code_engine_app.ce_postgrest_instance.endpoint_internal
     DB_NAME = "det"
     DB_USER = "pgrstuser"
-    S3_ACCESS_KEY_ID         = ibm_resource_key.cos_resource_key.credentials["cos_hmac_keys.access_key_id"]
-    S3_SECRET_ACCESS_KEY     = ibm_resource_key.cos_resource_key.credentials["cos_hmac_keys.secret_access_key"]
+    S3_ACCESS_KEY_ID          = ibm_resource_key.cos_resource_key.credentials["cos_hmac_keys.access_key_id"]
+    S3_SECRET_ACCESS_KEY      = ibm_resource_key.cos_resource_key.credentials["cos_hmac_keys.secret_access_key"]
     S3_DEF_BUCKET             = "${var.project_name}-${random_pet.cos_bucket_suffix.id}"
-    S3_ENDPOINT               = "https://${ibm_cos_bucket.cos_bucket.s3_endpoint_public}"
+    S3_ENDPOINT_URL           = "https://${ibm_cos_bucket.cos_bucket.s3_endpoint_public}"
     GENAI_API = var.genai_api
     GENAI_KEY = var.genai_apikey
     PGRST_JWT_SECRET = local.pgrst_jwt_32
