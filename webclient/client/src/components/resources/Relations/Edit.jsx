@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react'
-import { Edit, SimpleForm, TextInput, DateInput, ReferenceInput, TextField,useRecordContext, BooleanInput, SimpleFormIterator, ArrayInput } from 'react-admin'
+import { useState, useEffect } from 'react'
+import { Edit, SimpleForm, TextInput, DateInput, ReferenceInput, TextField, useRecordContext, BooleanInput, SimpleFormIterator, ArrayInput } from 'react-admin'
 import { useFormContext } from 'react-hook-form'
 import { Toolbar } from 'components/carbon-ra'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -19,20 +19,20 @@ const ImageFileField = (props) => {
   useEffect(() => {
     if (!contentLink) {
       console.log(`getting signed link for ${record.s3_key}`)
-      fetch( `/api/s3/getlink?bucket=${record.s3_bucket}&key=${record.s3_key}`, {
+      fetch(`/api/s3/getlink?bucket=${record.s3_bucket}&key=${record.s3_key}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${access_token}`,
           'Content-Type': 'application/json',
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        setContentLink(data.link)
-      })
-      .catch(error => {
-        console.error('Error fetching pre signed s3 link', error);
-      }); 
+        .then(response => response.json())
+        .then(data => {
+          setContentLink(data.link)
+        })
+        .catch(error => {
+          console.error('Error fetching pre signed s3 link', error);
+        });
     }
   }, [record.s3_key]); // The empty dependency array ensures this effect runs only once
 
@@ -70,7 +70,7 @@ const FormInput = ({ className, ...rest }) => {
 const PostEdit = () => (
   <Edit>
     <SimpleForm toolbar={<Toolbar />}>
-      <TextField source="id"/>
+      <TextField source="id" />
       <ReferenceInput source="doc_id" reference="documents" />
       <ReferenceInput source="user_id" reference="users" />
       <ReferenceInput source="prompt_id" reference="prompts" />
@@ -78,22 +78,22 @@ const PostEdit = () => (
       <ArrayInput source="extraction_results">
         <SimpleFormIterator inline fullWidth>
           <TextInput source="field" helperText={false} />
-          <TextInput source="question" helperText={false} fullWidth/>
+          <TextInput source="value" helperText={false} fullWidth />
         </SimpleFormIterator>
       </ArrayInput>
       <BooleanInput source="needs_review" />
       <TextInput
-            source="comments"
-            fullWidth
-            multiline
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <AddComment />
-                </InputAdornment>
-              ),
-            }}
-          />
+        source="comments"
+        fullWidth
+        multiline
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <AddComment />
+            </InputAdornment>
+          ),
+        }}
+      />
       <TextInput source="index_start" />
       <TextInput source="index_end" />
       <ImageFileField />

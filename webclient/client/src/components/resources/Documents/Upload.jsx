@@ -51,7 +51,9 @@ const Upload = ({ ...props }) => (
         </Column>
         <Column lg={12} />
         <Column lg={12} >
-        <ReferenceArrayInput source="prompt_id" reference='prompts' validate={required()}/>
+        <ReferenceArrayInput source="prompt_id" reference='prompts'>
+          <AutocompleteArrayInput validate={required()} />
+        </ReferenceArrayInput>
         </Column>
       </Grid>
     </SimpleForm>
