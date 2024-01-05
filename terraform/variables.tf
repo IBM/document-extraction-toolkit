@@ -29,12 +29,18 @@ variable "cr_registry" {
 
 variable "region" {
   default = "us-south"
-  description = "account region"
+  description = "account region (us-south, us-east, etc)"
 }
 # github repository
 variable "github_repo" {
   default = "https://github.com/IBM/document-extraction-toolkit"
   description = "location of the github mono repo"
+}
+
+variable "use_ssh_key" {
+  description = "Whether to use an SSH private key to access the github repo for Code Engine build. Set to True when using with a private repo"
+  type        = bool
+  default     = false
 }
 
 # github repository

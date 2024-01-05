@@ -100,7 +100,8 @@ Once the workspace is created, please update the following variables:
 | cr_namespace    | Use a unique name. Do not use the default value.                                                        |
 | cr_registry     | Use private.icr.io for global. Do not use the public one.                                              |
 | region          | Use the same region where your resource group was created. All new resources are deployed to this region.|
-| ssh_deploykey   | Create an SSH deploy key used for container registry and Code Engine deployments. Mark as sensitive.   |
+| use_ssh_key     | Determines if the SSH deploy key is to be used when pulling from the repo. Applies to private repos only.   |
+| ssh_deploykey   | Create an SSH deploy key used for container registry and Code Engine deployments when using with a private repo. Mark as sensitive.   |
 | genai_apikey    | Your WatsonX API key. Sensitive.                                                                      |
 | genai_url       | WatsonX service endpoint URL.                                                                         |
 

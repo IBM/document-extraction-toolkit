@@ -6,7 +6,7 @@ resource "ibm_code_engine_build" "ce_build_instance_ui" {
   output_secret      = ibm_code_engine_secret.ce_cr_registry.name
   source_context_dir = "webclient"
   source_url         = var.github_repo
-  source_secret      = resource.ibm_code_engine_secret.ce_secret_instance_ssh.name
+  source_secret      = var.use_ssh_key ? resource.ibm_code_engine_secret.ce_secret_instance_ssh.name : null
   strategy_type      = "dockerfile"
   strategy_size      = "large"
   timeout            = "1200"
@@ -20,7 +20,7 @@ resource "ibm_code_engine_build" "ce_build_instance_sqitch" {
   output_secret      = ibm_code_engine_secret.ce_cr_registry.name
   source_context_dir = "sqitch"
   source_url         = var.github_repo
-  source_secret      = resource.ibm_code_engine_secret.ce_secret_instance_ssh.name
+  source_secret      = var.use_ssh_key ? resource.ibm_code_engine_secret.ce_secret_instance_ssh.name : null
   strategy_type      = "dockerfile"
 }
 
@@ -32,7 +32,7 @@ resource "ibm_code_engine_build" "ce_build_instance_worker" {
   output_secret      = ibm_code_engine_secret.ce_cr_registry.name
   source_context_dir = "server"
   source_url         = var.github_repo
-  source_secret      = resource.ibm_code_engine_secret.ce_secret_instance_ssh.name
+  source_secret      = var.use_ssh_key ? resource.ibm_code_engine_secret.ce_secret_instance_ssh.name : null
   strategy_type      = "dockerfile"
   timeout            = "2400"
 }
@@ -61,7 +61,7 @@ resource "restapi_object" "buildrun_sqitch" {
       #source_url         = var.github_repo
       #strategy_type      = "dockerfile"
       #source_context_dir = "sqitch"
-      #source_secret      = resource.ibm_code_engine_secret.ce_secret_instance_ssh.name
+      #source_secret      = var.use_ssh_key ? resource.ibm_code_engine_secret.ce_secret_instance_ssh.name : null
       #timeout            = 360
     }
   )
@@ -79,7 +79,7 @@ resource "restapi_object" "buildrun_worker" {
       #source_url         = var.github_repo
       #strategy_type      = "dockerfile"
       #source_context_dir = "server"
-      #source_secret      = resource.ibm_code_engine_secret.ce_secret_instance_ssh.name
+      #source_secret      = var.use_ssh_key ? resource.ibm_code_engine_secret.ce_secret_instance_ssh.name : null
       #timeout            = 2400
     }
   )
@@ -97,7 +97,7 @@ resource "restapi_object" "buildrun_ui" {
       #source_url         = var.github_repo
       #strategy_type      = "dockerfile"
       #source_context_dir = "webclient"
-      #source_secret      = resource.ibm_code_engine_secret.ce_secret_instance_ssh.name
+      #source_secret      = var.use_ssh_key ? resource.ibm_code_engine_secret.ce_secret_instance_ssh.name : null
       #strategy_size      = "large"
       #timeout            = 1200
     }
