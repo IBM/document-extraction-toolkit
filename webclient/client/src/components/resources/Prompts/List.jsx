@@ -28,7 +28,8 @@ const PromptList = () => {
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
         },
-      }}>
+      }}
+      rowClick="expand">
       <TextField source="id" />
       <ShowButton />
       <EditButton />

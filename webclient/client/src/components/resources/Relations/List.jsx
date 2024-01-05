@@ -51,6 +51,7 @@ const PostList = () => {
       sort={{ field: 'updated_at', order: 'DESC' }}>
       <Datagrid expand={<PostShow />}
         expandSingle
+        rowClick="expand"
       >
         {/* <TextField source="id" /> */}
         <ReferenceField source="doc_id" reference="documents" link="show" />
