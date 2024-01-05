@@ -1,5 +1,5 @@
 locals {
-  postgresdb_password_16 = substr(random_pet.postgresdb_password.id, 0, 16)
+  postgresdb_password_16 = random_password.postgresdb_password.result
   pgrst_jwt_32          = substr(random_pet.pgrst_jwt.id, 0, 32)
 }
 

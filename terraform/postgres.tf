@@ -5,9 +5,11 @@ resource "random_password" "postgres_admin_password" {
   min_upper = 1
 }
 
-resource "random_pet" "postgresdb_password" {
-  length    = 16  # Adjust the desired length of the password in words
-  separator = "" # No separator between words
+resource "random_password" "postgresdb_password" {
+  length           = 16
+  special          = false
+  min_numeric = 1
+  min_upper = 1
 }
 
 resource "random_pet" "pgrst_jwt" {
@@ -24,7 +26,7 @@ resource "ibm_database" "databases_for_postgresql" {
   resource_group_id = data.ibm_resource_group.rg.id
   users {
     name     = "pgrstuser"
-    password = substr(random_pet.postgresdb_password.id,0,16)
+    password = random_password.postgresdb_password.result
   }
 
   group {
