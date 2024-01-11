@@ -42,7 +42,7 @@ const App = (props) => {
 
   return (
     <Admin requireAuth={appIDConfigured ? true : false} title="Document Extraction Toolkit" dataProvider={dataProvider} i18nProvider={i18nProvider}
-      layout={CarbonLayout} notification={Notification} theme={CarbonG90} store={store} authProvider={authProvider} loginPage={LoginPage}
+      layout={CarbonLayout} notification={Notification} theme={CarbonG90} store={store} authProvider={appIDConfigured ? authProvider : null} loginPage={LoginPage}
     >
       <CustomRoutes>
         <Route path="documents/upload" element={<Documents.Upload />} />

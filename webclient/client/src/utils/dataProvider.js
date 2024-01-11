@@ -11,7 +11,8 @@ const httpClient = (url, options = {}) => {
   if (!options.headers) {
       options.headers = new Headers({ Accept: 'application/json' });
   }
-  const { access_token } = JSON.parse(localStorage.getItem('token'));
+
+  const { access_token } = JSON.parse(localStorage.getItem('token')) || { access_token: false };
   //console.log(`using token ${access_token}`)
   if (access_token) {
     options.headers.set('Authorization', `Bearer ${access_token}`);

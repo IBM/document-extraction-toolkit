@@ -14,7 +14,7 @@ Create prompts from the UI for usage against uploaded documents.
     <img src="./assets/file_uploads.png" alt="Screenshot of File uploads" width="50%" />
 </div>
 
-# Live Demo
+## Live Demo
 
 A sample version deployed with Schematics (Terraform) is available [here](https://document-extraction-tk-ui.1bruy9t8zaj1.us-east.codeengine.appdomain.cloud/)
 

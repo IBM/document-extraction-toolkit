@@ -117,23 +117,24 @@ app.use(
     },
   })
 )
+if (config.SERVER_OIDC_CLIENT_SECRET) {
+  passport.use(new APIStrategy({
+    oauthServerUrl: REACT_APP_OIDC_ISSUER
+  }));
+}
 
-passport.use(new APIStrategy({
-	oauthServerUrl: REACT_APP_OIDC_ISSUER
-}));
-
-function requireAuth (req,res,next) {
+function requireAuth(req, res, next) {
   if (config.SERVER_OIDC_CLIENT_SECRET) {
     passport.authenticate(APIStrategy.STRATEGY_NAME, {
       session: false
-    })(req,res,next)
+    })(req, res, next)
   } else {
     next()
   }
 }
 
 app.use('/api', oidcRoutes)
-app.use('/api',requireAuth , uiRoutes)
+app.use('/api', requireAuth, uiRoutes)
 
 // static files
 app.use(express.static(staticFilesPath))
