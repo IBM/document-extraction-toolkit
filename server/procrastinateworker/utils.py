@@ -17,12 +17,13 @@ from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
 
 # GENAI
-from genai.extensions.langchain import LangChainInterface
-from genai.model import Credentials
-from genai.schemas import GenerateParams
+# from genai.extensions.langchain import LangChainInterface # use the GA watsonx
+#from genai.model import Credentials
+#from genai.schemas import GenerateParams
+from ibm_watson_machine_learning.metanames import GenTextParamsMetaNames as GenParams
 
 # Langchain
-from langchain import PromptTemplate
+from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain.document_loaders import PyPDFLoader
 from langchain.chains.question_answering import load_qa_chain
@@ -30,16 +31,31 @@ from langchain.chains.question_answering import load_qa_chain
 # PostgresT
 from .postgrestclient import make_authenticated_request
 
+# GA watsonx AAS
+from .ibmlangchain import LangChainInterface
+
 # ========== DEPENDENCIES END ==========
 
 # ========== FUNCTIONS ==========
 
 def watsonxai_model(model_name='google/flan-ul2', min_new_tokens=0, max_new_tokens=55, temperature=0.05):
     creds = get_creds()
-    params = GenerateParams(temperature=temperature, min_new_tokens=min_new_tokens, max_new_tokens=max_new_tokens)
-
+    #params = GenerateParams(temperature=temperature, min_new_tokens=min_new_tokens, max_new_tokens=max_new_tokens)
+    params = {
+        #GenParams.DECODING_METHOD: decoding_method,
+        GenParams.MIN_NEW_TOKENS: min_new_tokens,
+        GenParams.MAX_NEW_TOKENS: max_new_tokens,
+        #GenParams.RANDOM_SEED: random_seed,
+        GenParams.TEMPERATURE: temperature,
+        #GenParams.TOP_K: top_k,
+        #GenParams.TOP_P: top_p,
+        #GenParams.REPETITION_PENALTY: repetition_penalty,
+        #GenParams.STOP_SEQUENCES: stop_sequences
+    }
+    project_id = get_project() # It might make sense to use a different project_id per prompt in the future. requires schema change
     # Instantiate a model proxy object to send your requests
-    return LangChainInterface(model=model_name, credentials=creds, params=params)
+    print(params)
+    return LangChainInterface(model=model_name, credentials=creds, params=params, project_id=project_id)
 
 
 def create_chain(llm, template, input_variables):
@@ -76,13 +92,19 @@ def process_document_dynamic(document, prompt):
 
 def get_creds():
     load_dotenv()
-    api_key = os.getenv("GENAI_KEY", None)
-    api_endpoint = os.getenv("GENAI_API", None)
+    api_key = os.getenv("WML_APIKEY", None)
+    api_endpoint = os.getenv("WML_ENDPOINT", None)
     if api_key is None or api_endpoint is None:
-        raise Exception("Ensure .env file contains an api_key and an api_endpoint")
+        raise Exception("Ensure .env file contains an WML_APIKEY and an WML_ENDPOINT")
+    
+    return {"apikey":api_key, "url":api_endpoint}
 
-    return Credentials(api_key=api_key, api_endpoint=api_endpoint)
-
+def get_project():
+    load_dotenv()
+    project_id = os.getenv("WML_PROJECT_ID")
+    if project_id is None:
+        raise Exception("Ensure .env file contains WML_PROJECT_ID")
+    return project_id
 
 def track_progress(document, executor, doc_id=None, prompt=None):
     future = executor.submit(process_document_dynamic, document, prompt)

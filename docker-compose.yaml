@@ -4,7 +4,7 @@ services:
   # and providing a REST api, (almost) every request that is sent to the database goes through it
   postgrest:
     image: postgrest/postgrest:latest
-    container_name: postgrest
+    container_name: det-postgrest
     ports:
       - '3000:3000'
     links:
@@ -51,7 +51,7 @@ services:
     # sqitch instance, is responsible for migration of db schema
   sqitch-schema:
     image: sqitch/sqitch:v1.4.0.1
-    container_name: sqitch-schema
+    container_name: det-sqitch-schema
     links:
       - db
     command: ["deploy", "--verify"]

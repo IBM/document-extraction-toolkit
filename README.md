@@ -43,7 +43,7 @@ This web application consists of the following components:
 
 1. From root directory, run `cp .env.example .env`
 2. From root directory run `cp ./server/procrastinateworker/.env_example ./server/procrastinateworker/.env`
-3. Modify the GENAI_KEY value in the file `./server/procrastinateworker/.env`
+3. Modify the WML_APIKEY, WML_ENDPOINT,WML_PROJECT_ID  value in the file `./server/procrastinateworker/.env`
 4. From webclient directory, run `npm i` and then `npm run setupenv` - this will copy the .env files for local development
 
 ## Startup Sequence for Local Development (first time)
@@ -103,18 +103,23 @@ Once the workspace is created, please update the following variables:
 |-----------------|-------------------------------------------------------------------------------------------------------|
 | project_name    | Unique name of the project with no spaces. It will be used to prefix resources created by the template.|
 | resource_group  | Name of the resource group previously created.                                                        |
-| ce_project_id   | GUID of the Code Engine project. You can find this either on the URL path or the "Details" button.      |
-| cr_namespace    | Use a unique name. Do not use the default value.                                                        |
-| cr_registry     | Use icr.io for global. TF currently doesn't provision into other regions yet so do not use another value until this is fixed |
+| ce_project_id   | UUID of the Code Engine project. You can find this either on the URL path or the "Details" button.      |
+| cr_namespace    | Use a unique name. Do not use the default value!                                                        |
+| cr_registry     | Use icr.io for global. TF currently doesn't provision into other regions yet so do not use another value until this is fixed. If you see an error where built images can't be pushed into registry 403 error, change the region here and apply the template again. |
 | region          | Use the same region where your resource group was created. All new resources are deployed to this region.|
 | use_ssh_key     | Determines if the SSH deploy key is to be used when pulling from the repo. Applies to private repos only.   |
-| ssh_deploykey   | Create an SSH deploy key used for container registry and Code Engine deployments when using with a private repo. Mark as sensitive.   |
-| genai_apikey    | Your WatsonX API key. Sensitive.                                                                      |
-| genai_url       | WatsonX service endpoint URL.                                                                         |
+| ssh_deploykey   | Create an SSH deploy key used for container registry and Code Engine deployments when using with a private repo. Always mark as sensitive. You can leave this blank for public github deployments, but mark it sensitive!   |
+| wml_apikey      | Your WatsonX API key. Sensitive.                                                                      |
+| wml_endpoint    | WatsonX service endpoint URL. eg https://us-south.ml.cloud.ibm.com/ml/v1-beta                                |
+| wml_project_id  | Project UUID (Required)                                                                                         |
 
 Verify all settings and execute a generate plan. It should succeed, and then you can proceed to apply plan. If apply plan fails, you can try again one more time and it will start again. Some of the elements are timed, due to limitations on the provider. The plan should take about less than 2 hours to finish from start to finish and provisions all the necessary backend services (appid, s3), container registry, code engine image builds, code engine deployments. You will receive a fully functionaly web application after the template finishes.
 
-The code engine application **-worker needs to be manually adjusted after the template executes to be a daemon instead of a task (due to a terraform bug). 
+## Terraform Notes
+
+The code engine application **-worker needs to be manually adjusted after the template executes to be a __daemon__ instead of a task (due to a terraform bug).
+
+When using Schematics Workspaces, the auth token could potentially timeout midway during the run. If that happens, you can apply the template again without any issue.
 
 ## Further Development
 

@@ -51,13 +51,18 @@ variable "ssh_deploykey" {
   description = "Create a deploy private key using ssh-keygen -t ed25519 -C \"email@ibm.com\" -f yourkeyname"
 }
 
-variable "genai_api" {
-  default = "https://workbench-api.res.ibm.com/v1"
-  description = "URL of GENAI endpoint"
+variable "wml_endpoint" {
+  default = "https://us-south.ml.cloud.ibm.com"
+  description = "URL of wml watsonx aas endpoint"
 }
 
-variable "genai_apikey" {
+variable "wml_apikey" {
   default = ""
   sensitive = true
-  description = "apikey for genai"
+  description = "apikey for wml watsonx aas"
+}
+
+variable "wml_project_id" {
+  default = ""
+  description = "WML project ID"
 }
