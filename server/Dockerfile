@@ -1,5 +1,5 @@
 # Use an official Alpine Linux image as the base image
-FROM python:3.9-alpine
+FROM python:3.10-alpine
 
 # Create a non-root user to run the application
 RUN adduser -D watson
@@ -11,7 +11,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 
 # Install system dependencies required for numpy
-RUN apk add --no-cache musl-dev gcc g++ gfortran
+RUN apk add --no-cache git musl-dev gcc g++ gfortran libffi-dev
 
 # Install Python dependencies as the non-root user
 RUN pip install --no-cache-dir -r ./requirements.txt
