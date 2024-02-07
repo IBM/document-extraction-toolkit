@@ -54,10 +54,13 @@ def make_authenticated_request(table_name, method='GET', query_params=None, data
             return response.json()
         elif response.status_code == 400:
             print(response.content)
+            response_data = response.json()
             raise ValueError(response_data.get('message', 'Bad Request'))
         elif response.status_code == 401:
+            response_data = response.json()
             raise ValueError(response_data.get('message', 'Unauthorized'))
         elif response.status_code == 404:
+            response_data = response.json()
             raise ValueError(response_data.get('message', 'Not Found'))
         else:
             raise ValueError(f"Request failed with status code: {response.status_code}")

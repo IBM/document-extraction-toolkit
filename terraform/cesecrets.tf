@@ -86,8 +86,9 @@ resource "ibm_code_engine_secret" "ce_secret_worker" {
     S3_SECRET_ACCESS_KEY      = ibm_resource_key.cos_resource_key.credentials["cos_hmac_keys.secret_access_key"]
     S3_DEF_BUCKET             = "${var.project_name}-${random_pet.cos_bucket_suffix.id}"
     S3_ENDPOINT_URL           = "https://${ibm_cos_bucket.cos_bucket.s3_endpoint_public}"
-    GENAI_API = var.genai_api
-    GENAI_KEY = var.genai_apikey
+    WML_APIKEY = var.wml_apikey
+    WML_ENDPOINT = var.wml_endpoint
+    WML_PROJECT_ID = var.wml_project_id
     PGRST_JWT_SECRET = local.pgrst_jwt_32
   }
 }

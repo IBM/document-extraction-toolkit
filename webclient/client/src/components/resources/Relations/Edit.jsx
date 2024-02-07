@@ -14,17 +14,20 @@ const image = (id, filePath) => {
 
 const ImageFileField = (props) => {
   const record = useRecordContext(props)
-  const { access_token } = JSON.parse(localStorage.getItem('token'));
+  const { access_token } = JSON.parse(localStorage.getItem('token')) || { access_token: false };
   const [contentLink, setContentLink] = useState();
   useEffect(() => {
     if (!contentLink) {
       console.log(`getting signed link for ${record.s3_key}`)
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      if (access_token) {
+        headers['Authorization'] = `Bearer ${access_token}`;
+      }
       fetch(`/api/s3/getlink?bucket=${record.s3_bucket}&key=${record.s3_key}`, {
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${access_token}`,
-          'Content-Type': 'application/json',
-        }
+        headers: headers,
       })
         .then(response => response.json())
         .then(data => {
