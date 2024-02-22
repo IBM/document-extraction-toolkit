@@ -108,7 +108,7 @@ Once the workspace is created, please update the following variables:
 | cr_registry     | Use icr.io for global. TF currently doesn't provision into other regions yet so do not use another value until this is fixed. If you see an error where built images can't be pushed into registry 403 error, change the region here and apply the template again. |
 | region          | Use the same region where your resource group was created. All new resources are deployed to this region.|
 | use_ssh_key     | Determines if the SSH deploy key is to be used when pulling from the repo. Applies to private repos only.   |
-| ssh_deploykey   | Create an SSH deploy key used for container registry and Code Engine deployments when using with a private repo. Always mark as sensitive. You can leave this blank for public github deployments, but mark it sensitive!   |
+| ssh_deploykey   | Create an [SSH deploy key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#set-up-deploy-keys) used for container registry and Code Engine deployments when using with a private repo. Always mark as sensitive. You can leave this blank for public github deployments, but mark it sensitive!   |
 | wml_apikey      | Your WatsonX API key. Sensitive.                                                                      |
 | wml_endpoint    | WatsonX service endpoint URL. eg https://us-south.ml.cloud.ibm.com/ml/v1-beta                                |
 | wml_project_id  | Project UUID (Required)                                                                                         |
