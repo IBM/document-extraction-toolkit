@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react'
-import { Admin, Resource, CustomRoutes, ListGuesser,  EditGuesser, ShowGuesser, localStorageStore, Notification } from 'react-admin'
+import { useState, useEffect } from 'react'
+import { Admin, Resource, CustomRoutes, ListGuesser, EditGuesser, ShowGuesser, localStorageStore, Notification } from 'react-admin'
 import { Route } from 'react-router-dom'
 
 import dataProvider from '../../utils/dataProvider'
@@ -8,6 +8,7 @@ import CarbonLayout from '../Layout/carbonLayout.js'
 import CarbonG90 from '../../themes/carbon-g90'
 import { i18nProvider } from '../i18n/i18nprovider.js'
 import LoginPage from 'components/Login/LoginPage'
+import { Loading } from '@carbon/react'
 
 import {
   Roles,
@@ -28,6 +29,14 @@ const App = (props) => {
   // Using this to dynamically fetch the OIDC configuration from the server, since it would be really annoying to have to re-build individual images for each
   // customer
   const [appIDConfigured, setappIDConfigured] = useState(false)
+
+  // now we need to lazy load the auth and dataprovider as they depend on OIDC being enabled on the server or not (which is a network call)
+  // null -> initial state, we didn't finish lazy loading auth and data providers yet, so we do not render the react-admin app
+  // true -> OIDC is enabled, we need to load the correct authProvider and dataProvider
+  // false -> OIDC is disabled, we just need a dataProvider
+  const [authProvider, setAuthProvider] = useState(null);
+  const [dataProvider, setDataProvider] = useState(null);
+
   useEffect(() => {
     fetch('/api/oidc')
       .then(response => response.json())
@@ -40,10 +49,55 @@ const App = (props) => {
       });
   }, []); // The empty dependency array ensures this effect runs only once
 
+  // use "lazy" loading to ensure the correct auth and dataproviders are loaded
+  useEffect(() => {
+    console.log("loadProviders")
+    const loadProviders = async () => {
+      if (appIDConfigured) {
+        //console.log("appIDConfigured is true, loading auth and data refresh")
+        const { default: authprovider } = await import('utils/authProviderRefresh.js');
+        setAuthProvider(authprovider);
+        const { default: dataprovider } = await import('utils/dataProviderRefresh.js');
+        setDataProvider(dataprovider);
+      } else if (appIDConfigured === false) {
+        //console.log("appIDConfigured is false, loading dataprovider")
+        setAuthProvider(false); // turn off authProvider
+        const { default: dataprovider } = await import('utils/dataProvider.js');
+        setDataProvider(dataprovider);
+      }
+    };
+
+    loadProviders();
+  }, [appIDConfigured]);
+
+  if (authProvider === null) {
+    return <Loading withOverlay />; // Loading state
+  } else if (dataProvider === null) {
+    return <Loading withOverlay />; // Loading state
+  }
+
+  const authConditionalProps = appIDConfigured ? { requireAuth: true } : {};
+  const authConditionalPropsDataProvider = appIDConfigured ? { dataProvider: dataProvider } : { dataProvider: dataProvider };
+  const authConditionalPropsAuthProvider = appIDConfigured ? { authProvider: authProvider } : {};
+  //console.log("using appIDConfigured", appIDConfigured)
+
+  const LogoutPage = () => {
+    // Clear tokens and session data
+    console.log("/logout removing tokens")
+    localStorage.removeItem('token');
+    // Redirect to login or homepage
+    return redirect("/login")
+  };
+
+
   return (
-    <Admin requireAuth={appIDConfigured ? true : false} title="Document Extraction Toolkit" dataProvider={dataProvider} i18nProvider={i18nProvider}
-      layout={CarbonLayout} notification={Notification} theme={CarbonG90} store={store} authProvider={appIDConfigured ? authProvider : null} loginPage={LoginPage}
+    <Admin title="Document Extraction Toolkit" i18nProvider={i18nProvider}
+      layout={CarbonLayout} notification={Notification} theme={CarbonG90} store={store} loginPage={LoginPage}
+      {...authConditionalProps}
+      {...authConditionalPropsAuthProvider}
+      {...authConditionalPropsDataProvider}
     >
+      <Route path="/logout" component={LogoutPage} />
       <CustomRoutes>
         <Route path="documents/upload" element={<Documents.Upload />} />
       </CustomRoutes>
