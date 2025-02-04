@@ -13,7 +13,7 @@ services:
       - PGRST_OPENAPI_MODE=ignore-privileges
       #- PGRST_DB_URI=postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}
       - PGRST_DB_URI=${PGRST_DB_URI-postgres://auth:authpass@db:5432/det}
-      - PGRST_DB_SCHEMAS=${DB_SCHEMA-"data,public"}
+      - PGRST_DB_SCHEMAS=${DB_SCHEMA-data,public}
       - PGRST_DB_EXTRA_SEARCH_PATH=${DB_EXTRA_SEARCH_PATH-public,ibm_extension}
       - PGRST_DB_ANON_ROLE=${DB_ANON_ROLE-anonymous}
       - PGRST_DB_POOL=${DB_POOL-10}
