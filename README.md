@@ -5,7 +5,7 @@ Prototype UI for handling automated document extraction tasks using WatsonX mode
 Create prompts from the UI for usage against uploaded documents.
 
 <div align="center">
-    <img src="./assets/det.drawio.png" alt="Architecture Diagram" width="50%" />
+    <img src="./assets/det.drawio.png" alt="Architecture Diagram" width="100%" />
 </div>
 <div align="center">
     <img src="./assets/extracted_relationships.png" alt="Screenshot of DET" width="50%" />
